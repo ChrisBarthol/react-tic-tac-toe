@@ -61,13 +61,13 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _Tictactoe = __webpack_require__(179);
+	var _Game = __webpack_require__(179);
 
-	var _Tictactoe2 = _interopRequireDefault(_Tictactoe);
+	var _Game2 = _interopRequireDefault(_Game);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_reactDom2.default.render(_react2.default.createElement(_Tictactoe2.default, null), document.getElementById('app'));
+	_reactDom2.default.render(_react2.default.createElement(_Game2.default, null), document.getElementById('app'));
 
 /***/ },
 /* 2 */
@@ -21488,6 +21488,159 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Board = __webpack_require__(180);
+
+	var _Board2 = _interopRequireDefault(_Board);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	__webpack_require__(182);
+
+	var Game = function (_Component) {
+	  _inherits(Game, _Component);
+
+	  function Game() {
+	    _classCallCheck(this, Game);
+
+	    return _possibleConstructorReturn(this, (Game.__proto__ || Object.getPrototypeOf(Game)).apply(this, arguments));
+	  }
+
+	  _createClass(Game, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'game' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'game-board' },
+	          _react2.default.createElement(_Board2.default, null)
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'game-info' },
+	          _react2.default.createElement('div', null),
+	          _react2.default.createElement('ol', null)
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Game;
+	}(_react.Component);
+
+	exports.default = Game;
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Square = __webpack_require__(181);
+
+	var _Square2 = _interopRequireDefault(_Square);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Board = function (_Component) {
+	  _inherits(Board, _Component);
+
+	  function Board() {
+	    _classCallCheck(this, Board);
+
+	    return _possibleConstructorReturn(this, (Board.__proto__ || Object.getPrototypeOf(Board)).apply(this, arguments));
+	  }
+
+	  _createClass(Board, [{
+	    key: 'renderSquare',
+	    value: function renderSquare(i) {
+	      return _react2.default.createElement(_Square2.default, null);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var status = 'Next player X';
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'status' },
+	          status
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'board-row' },
+	          this.renderSquare(0),
+	          this.renderSquare(1),
+	          this.renderSquare(2)
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'board-row' },
+	          this.renderSquare(3),
+	          this.renderSquare(4),
+	          this.renderSquare(5)
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'board-row' },
+	          this.renderSquare(6),
+	          this.renderSquare(7),
+	          this.renderSquare(8)
+	        )
+	      );
+	    }
+	  }]);
+
+	  return Board;
+	}(_react.Component);
+
+	exports.default = Board;
+
+/***/ },
+/* 181 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(2);
@@ -21502,32 +21655,32 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Tictactoe = function (_Component) {
-	  _inherits(Tictactoe, _Component);
+	var Square = function (_Component) {
+	  _inherits(Square, _Component);
 
-	  function Tictactoe() {
-	    _classCallCheck(this, Tictactoe);
+	  function Square() {
+	    _classCallCheck(this, Square);
 
-	    return _possibleConstructorReturn(this, (Tictactoe.__proto__ || Object.getPrototypeOf(Tictactoe)).apply(this, arguments));
+	    return _possibleConstructorReturn(this, (Square.__proto__ || Object.getPrototypeOf(Square)).apply(this, arguments));
 	  }
 
-	  _createClass(Tictactoe, [{
-	    key: 'render',
+	  _createClass(Square, [{
+	    key: "render",
 	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        null,
-	        _react2.default.createElement(
-	          'h1',
-	          null,
-	          'Welcome to Tic Tac Toe'
-	        )
-	      );
+	      return _react2.default.createElement("button", { className: "square" });
 	    }
 	  }]);
 
-	  return Tictactoe;
+	  return Square;
 	}(_react.Component);
+
+	exports.default = Square;
+
+/***/ },
+/* 182 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
 
 /***/ }
 /******/ ]);
