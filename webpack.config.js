@@ -21,9 +21,7 @@ module.exports = {
       },
     ]
   },
-  plugins: [
-      new ExtractTextPlugin("app.css")
-  ],
+  plugins: [ExtractTextPluginConfig],
   devServer: {
     inline: true,
     port: 8081
