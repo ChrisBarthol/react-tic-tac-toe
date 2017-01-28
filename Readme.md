@@ -48,3 +48,18 @@ https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
 
 Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
 https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
+
+
+###Fuller app
+Add Header and Footer and some more styling
+https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
+
+
+###Add React Router
+npm install --save react-router
+Update index.js
+add App.js
+https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
+
+###Nested Routes
+https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
