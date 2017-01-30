@@ -99,60 +99,49 @@ ReactDOM.render(
 ```
 
 We need to tell our `dist/index.html` file to load the bundled js file.  In our `app/index.js`
-file we tell React that we are going to load a Game component into a certain DOM
-element 'app'.  
+file we'll tell React that we are going to load a Game component into a certain DOM
+element 'app'.  The last thing we need to add is the Game component.
 
+#components/Game.js
+```
+import React, { Component } from 'react'
 
+class Game extends Component {
+  render(){
+    return(
+      <div>
+        Welcome to Tic Tac Toe!
+      </div>
+    )
+  }
+}
 
-Add app and dist directories
-Add index.html and index.js, and dist/index.html files.  We will be rebuilding index_bundle.js with webpack.
+export default Game
+```
+Components always have a single render method.  This render method must return one object.
+Here we define a single div tag to encapsulate some text.  
 
-Add app/components directory
-https://gist.github.com/ChrisBarthol/655cf4e65df70724d5c7773fbfa0c34b
+WHEW
 
-
-###Adding Components
-Add Board.js Square.js and redo Game.js
-https://gist.github.com/ChrisBarthol/bb6baa798162ff0775055f2d1b12eee7
-
+Now we are ready to run our app using webpack.  The following command runs the dev server
+from the contents of the dist folder.
+```
 webpack-dev-server --content-base dist/
+```
 
-###Adding Style
-npm install --save-dev extract-text-webpack-plugin style-loader css-loader
-https://gist.github.com/ChrisBarthol/9f95b137dbcdba485af9b198b186588b
+We will be using this command a lot and more than likely you will forget some part of it.
+Lets add a script to help us. In our `package.json` file we can a start script to run our
+command.  Now we can run `npm start` and it will boot up for dev server!
 
+#package.json
+```
+"scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "start": "webpack-dev-server --content-base dist/"
+},
+```
 
-replace <Square /> with <Square value={i} />
-and the TODO with {this.props.value}
-Extra passing this
-https://gist.github.com/ChrisBarthol/7d495c03ef1eb4b28c555799ddd27d3b
-
-Clicking for X
-https://gist.github.com/ChrisBarthol/5399c2a376aedec14d3320858814e8eb
-
-Push state upwards
-https://gist.github.com/ChrisBarthol/c4f359aa0d45bc889789ddfa1f0e77cb
-
-Functional Components and Taking Turns
-https://gist.github.com/ChrisBarthol/75bba2883adb57a942a6d66b910b9962
-
-Declaring a winner
-https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
-
-Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
-https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
-
-
-###Fuller app
-Add Header and Footer and some more styling
-https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
-
-
-###Add React Router
-npm install --save react-router
-Update index.js
-add App.js
-https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
-
-###Nested Routes
-https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
+Run `npm start` and navigate to [localhost:8080](localhost:8080).  You should setState
+your welcome message!  Try directly editing the text in the Game component.  You'll
+notice that webpack-dev-server monitors changes to files and we'll reload the app
+once you have saved your changes.
