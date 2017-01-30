@@ -1,65 +1,131 @@
-###Command List
-
-mkdir tictactoe
-npm init
-
-copy and paste package.json depencies and run yarn install (need to have yarn installed)
-
-npm install --save react react-dom
-npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server
+##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
 
-Create webpack.config.js and .babelrc
+###Adding more components
 
-Add app and dist directories
-Add index.html and index.js, and dist/index.html files.  We will be rebuilding index_bundle.js with webpack.
+Now that we have a working main app lets go ahead and add a few more components.
+We'll break up our tic tac toe into three components.  The Game consists of a Board.
+This Board has nine Squares.
 
-Add app/components directory
-https://gist.github.com/ChrisBarthol/655cf4e65df70724d5c7773fbfa0c34b
+#Square.js
+```
+import React, { Component } from 'react'
 
+class Square extends Component {
+  render(){
+    return(
+      <button className="square">
+        {/* TODO */}
+      </button>
+    )
+  }
+}
 
-###Adding Components
-Add Board.js Square.js and redo Game.js
-https://gist.github.com/ChrisBarthol/bb6baa798162ff0775055f2d1b12eee7
+export default Square
+```
 
-webpack-dev-server --content-base dist/
-
-###Adding Style
-npm install --save-dev extract-text-webpack-plugin style-loader css-loader
-https://gist.github.com/ChrisBarthol/9f95b137dbcdba485af9b198b186588b
-
-
-replace <Square /> with <Square value={i} />
-and the TODO with {this.props.value}
-Extra passing this
-https://gist.github.com/ChrisBarthol/7d495c03ef1eb4b28c555799ddd27d3b
-
-Clicking for X
-https://gist.github.com/ChrisBarthol/5399c2a376aedec14d3320858814e8eb
-
-Push state upwards
-https://gist.github.com/ChrisBarthol/c4f359aa0d45bc889789ddfa1f0e77cb
-
-Functional Components and Taking Turns
-https://gist.github.com/ChrisBarthol/75bba2883adb57a942a6d66b910b9962
-
-Declaring a winner
-https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
-
-Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
-https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
+Our most basic component will be a square of the board.  Every square will be a button
+which, when clicked, will populate the square with an X or an O.
 
 
-###Fuller app
-Add Header and Footer and some more styling
-https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
+#Board.js
+```
+import React, { Component } from 'react'
+import Square from './Square'
 
+class Board extends Component {
+  renderSquare(i) {
+    return <Square />
+  }
 
-###Add React Router
-npm install --save react-router
-Update index.js
-add App.js
-https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
+  render() {
+    const status = 'Next player X'
+    return(
+      <div>
+        <div className="status">{status}</div>
+        <div className="board-row">
+          {this.renderSquare(0)}
+          {this.renderSquare(1)}
+          {this.renderSquare(2)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(3)}
+          {this.renderSquare(4)}
+          {this.renderSquare(5)}
+        </div>
+        <div className="board-row">
+          {this.renderSquare(6)}
+          {this.renderSquare(7)}
+          {this.renderSquare(8)}
+        </div>
+      </div>
+    )
+  }
+}
 
-###Nested Routes
-https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
+export default Board
+```
+
+Our Board component consists of nine Square components.  There are three rows with
+three Squares to each.  We call the Square component from the renderSquare function.
+
+#Game.js
+```
+import React, { Component } from 'react'
+import Board from './Board'
+
+class Game extends Component {
+  render(){
+    return (
+      <div className="game">
+        <div className="game-board">
+          <Board />
+        </div>
+        <div className="game-info">
+          <div>{/* status */}</div>
+          <ol>{/* TODO */}</ol>
+        </div>
+      </div>
+    )
+  }
+}
+
+export default Game
+```
+
+Our Game component can now be updated to display the Board component.  We've added
+a few other html components that we will populated later.
+
+###Passing props
+
+Let's allow us to see which square is which.  We currently pass the `renderSquare`
+function the number of the square.  To pass this to the Square component we can update
+the code:
+#In Board.js
+```
+renderSquare(i) {
+  return <Square value={i}/>
+}
+```
+
+We'll pass the number to the Square component as a property named 'value'. Now we need
+to update the Square component to use the passed property.  In React passed property
+are found on the props object of the class.  Replace `/* TODO */` with `this.props.value`
+#In Square.js
+```
+import React, { Component } from 'react'
+
+class Square extends Component {
+  render(){
+    return(
+      <button className="square">
+        {this.props.value}
+      </button>
+    )
+  }
+}
+
+export default Square
+```
+
+Navigating to page we can now see each square with its' number displayed.
