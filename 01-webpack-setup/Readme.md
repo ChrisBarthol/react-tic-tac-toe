@@ -28,7 +28,7 @@ npm install --save react react-dom
 npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server
 ```
 
-Now we can create a `webpack.congfig.js` file.
+Now we can create a `webpack.congfig.js` file.  This is a webpack v1 file!
 
 ```
 module.exports = {

@@ -1,65 +1,121 @@
-###Command List
+##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
-mkdir tictactoe
-npm init
-
-copy and paste package.json depencies and run yarn install (need to have yarn installed)
-
-npm install --save react react-dom
-npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server
-
-
-Create webpack.config.js and .babelrc
-
-Add app and dist directories
-Add index.html and index.js, and dist/index.html files.  We will be rebuilding index_bundle.js with webpack.
-
-Add app/components directory
-https://gist.github.com/ChrisBarthol/655cf4e65df70724d5c7773fbfa0c34b
-
-
-###Adding Components
-Add Board.js Square.js and redo Game.js
-https://gist.github.com/ChrisBarthol/bb6baa798162ff0775055f2d1b12eee7
-
-webpack-dev-server --content-base dist/
 
 ###Adding Style
-npm install --save-dev extract-text-webpack-plugin style-loader css-loader
-https://gist.github.com/ChrisBarthol/9f95b137dbcdba485af9b198b186588b
 
+Currently our board doenst look very good.  We have classes but we havent defined
+any style.  A lot of react apps might just use inline style tags.  Personally I
+feel this is ugly and cumbersome.
 
-replace <Square /> with <Square value={i} />
-and the TODO with {this.props.value}
-Extra passing this
-https://gist.github.com/ChrisBarthol/7d495c03ef1eb4b28c555799ddd27d3b
+Luckily we can have webpack compile our CSS files as well as our JS files.  For this
+we will use the `extract-text-webpack-plugin`.
 
-Clicking for X
-https://gist.github.com/ChrisBarthol/5399c2a376aedec14d3320858814e8eb
+Let's go ahead and install this plugin:
+```
+npm install --save-dev extract-text-webpack-plugin
+```
 
-Push state upwards
-https://gist.github.com/ChrisBarthol/c4f359aa0d45bc889789ddfa1f0e77cb
+We'll also need to install some new loaders to work with our styles and css.  The
+style loader adds css to the DOM by injecting a `<style>` tag.
+```
+npm install --save-dev css-loader style-loader
+```
 
-Functional Components and Taking Turns
-https://gist.github.com/ChrisBarthol/75bba2883adb57a942a6d66b910b9962
+We need to configure webpack to use this plugin.  NOTE: This is webpack v1.
 
-Declaring a winner
-https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
+#webpack.config.js
+```
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
-https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
+var ExtractTextPluginConfig = new ExtractTextPlugin('app.css', {
+  allChunks: true
+});
 
+module.exports = {
+  entry: [
+    './app/index.js'
+  ],
+  output: {
+    path: __dirname + '/dist',
+    filename: "index_bundle.js"
+  },
+  module: {
+    loaders: [
+      {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
+      {
+          test: /\.css$/,
+          loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+      },
+    ]
+  },
+  plugins: [ExtractTextPluginConfig]
+};
+```
 
-###Fuller app
-Add Header and Footer and some more styling
-https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
+Here we import the extract-text-webpack-plugin.  We follow the config notes and
+instantiate the plugin with the file we want to output too.  We add another loader
+to test for `.css` files.  We load these files through the plugin and the style and
+css loader.  Finally we tell webpack of the plugin we are using in the plugins section.
 
+Lets add some CSS! In your app directory create a styles folder and create a `main.css` file
 
-###Add React Router
-npm install --save react-router
-Update index.js
-add App.js
-https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
+#app/styles/main.css
+```
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+  margin: 20px;
+}
 
-###Nested Routes
-https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
+ol, ul {
+  padding-left: 30px;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.square {
+  background: #fff;
+  border: 1px solid #999;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 100px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 100px;
+}
+
+.square:focus {
+  outline: none;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+.game {
+  width: 100%;}
+
+.game-board {
+  width: 17%;
+  margin: 0 auto;
+}
+
+.game-info {
+  width: 10%;
+  text-align: center;
+  margin: 0 auto;
+}
+```
+
+Lets run the dev server again `npm start`
