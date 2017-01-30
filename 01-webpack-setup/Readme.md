@@ -1,6 +1,4 @@
-###This is a continuation of the react-tic-tac-toe tutorial. The state of the app
-###in this lesson is the end state of the directions in the Readme.
-###Follow the directions in the Readme and you should arrive at the same state.
+##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
 
 ###Welcome!
