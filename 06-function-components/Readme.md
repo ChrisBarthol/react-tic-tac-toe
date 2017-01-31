@@ -1,65 +1,33 @@
-###Command List
-
-mkdir tictactoe
-npm init
-
-copy and paste package.json depencies and run yarn install (need to have yarn installed)
-
-npm install --save react react-dom
-npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server
+##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
 
-Create webpack.config.js and .babelrc
+###Stateless Functional Components
 
-Add app and dist directories
-Add index.html and index.js, and dist/index.html files.  We will be rebuilding index_bundle.js with webpack.
+Our Square component is pretty plain at this point.  It has a few props passed to
+it and has only a single render function.  It currently does not depend on state.
+In React 14 they introduced stateless function components.  Instead of defining
+an entire Class for the square we can return a single function.
 
-Add app/components directory
-https://gist.github.com/ChrisBarthol/655cf4e65df70724d5c7773fbfa0c34b
+#Square.js
+```
+import React, { Component } from 'react'
 
+function Square(props) {
+  return (
+    <button className="square" onClick={() => props.onClick()}>
+      {props.value}
+    </button>
+  );
+}
 
-###Adding Components
-Add Board.js Square.js and redo Game.js
-https://gist.github.com/ChrisBarthol/bb6baa798162ff0775055f2d1b12eee7
+export default Square
+```
 
-webpack-dev-server --content-base dist/
+Notice `this` has now disappeared from our file.  We pass the props directly into
+the Square function and return the button.
 
-###Adding Style
-npm install --save-dev extract-text-webpack-plugin style-loader css-loader
-https://gist.github.com/ChrisBarthol/9f95b137dbcdba485af9b198b186588b
+That's really it for this section.  But take some time to read up on these types
+of components and some other React reading materials
 
-
-replace <Square /> with <Square value={i} />
-and the TODO with {this.props.value}
-Extra passing this
-https://gist.github.com/ChrisBarthol/7d495c03ef1eb4b28c555799ddd27d3b
-
-Clicking for X
-https://gist.github.com/ChrisBarthol/5399c2a376aedec14d3320858814e8eb
-
-Push state upwards
-https://gist.github.com/ChrisBarthol/c4f359aa0d45bc889789ddfa1f0e77cb
-
-Functional Components and Taking Turns
-https://gist.github.com/ChrisBarthol/75bba2883adb57a942a6d66b910b9962
-
-Declaring a winner
-https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
-
-Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
-https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
-
-
-###Fuller app
-Add Header and Footer and some more styling
-https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
-
-
-###Add React Router
-npm install --save react-router
-Update index.js
-add App.js
-https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
-
-###Nested Routes
-https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
+[Different Names of Components](https://tylermcginnis.com/functional-components-vs-stateless-functional-components-vs-stateless-components/)
+[Components, Element, Instances](https://medium.com/@dan_abramov/react-components-elements-and-instances-90800811f8ca#.eppqaykyd)
