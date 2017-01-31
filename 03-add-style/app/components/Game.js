@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Board from './Board'
+require('../styles/main.css')
 
 class Game extends Component {
   render(){

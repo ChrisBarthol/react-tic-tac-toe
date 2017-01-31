@@ -117,5 +117,78 @@ ol, ul {
   margin: 0 auto;
 }
 ```
+Since this is our Game component CSS we need to require it in the Game component
 
-Lets run the dev server again `npm start`
+#component/Game.js
+```
+import React, { Component } from 'react'
+import Board from './Board'
+require('../styles/main.css')
+```
+
+Also dont forgot to import the `app.css` file in the `dist/index.html`
+
+#dist/index.html
+```
+<link href="app.css" rel="stylesheet">
+```
+If you run `webpack` you will now see `index_bundle.js` gets compiled as well as
+our `app.css` file.  In your dist folder you will also see an `app.css` file.
+Run `npm start` and you will see the CSS changes.
+
+
+It is frustrating to go and edit the index.html file in both the app and dist files.
+While we are updating our webpack config, lets go ahead and fix this issue.
+We will use the `html-webpack-plugin`, so lets install it
+
+```
+npm install html-webpack-plugin --save-dev
+```
+
+Now update the webpack config
+
+#webpack.config.js
+```
+var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
+var ExtractTextPluginConfig = new ExtractTextPlugin('app.css', {
+  allChunks: true
+});
+
+var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
+  template: __dirname + '/app/index.html',
+  filename: 'index.html',
+  inject: 'body'
+});
+
+module.exports = {
+  entry: [
+    './app/index.js'
+  ],
+  output: {
+    path: __dirname + '/dist',
+    filename: "index_bundle.js"
+  },
+  module: {
+    loaders: [
+      {test: /\.js$/, exclude: /node_modules/, loader: "babel-loader"},
+      {
+          test: /\.css$/,
+          loader: ExtractTextPlugin.extract("style-loader", "css-loader")
+      },
+    ]
+  },
+  plugins: [HTMLWebpackPluginConfig, ExtractTextPluginConfig],
+  devServer: {
+    inline: true,
+    port: 8083
+  }
+};
+
+```
+
+Here we require the plugin, config the plugin with our original template (/app/indes.html), the outfile filename,
+and what element we are going to use.  Go ahead and delete the `dist/index.html` file and then run `webpack`.
+We are now compiling the index_bundle.js, the css, as well as the index.html file.  The `dist/index.html` file has
+been made for us with the correct imports of the `app.css` file as well as the `index_bundle.js`.
