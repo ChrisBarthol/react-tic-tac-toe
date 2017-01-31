@@ -1,65 +1,67 @@
-###Command List
-
-mkdir tictactoe
-npm init
-
-copy and paste package.json depencies and run yarn install (need to have yarn installed)
-
-npm install --save react react-dom
-npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server
+##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
 
-Create webpack.config.js and .babelrc
+###Click Events
 
-Add app and dist directories
-Add index.html and index.js, and dist/index.html files.  We will be rebuilding index_bundle.js with webpack.
+Currently our buttons in Square.js component don't do anything, let's fix that!
 
-Add app/components directory
-https://gist.github.com/ChrisBarthol/655cf4e65df70724d5c7773fbfa0c34b
+#Square.js
+```
+<button className="square" onClick={() => alert('click')}>
+```
+
+Now when we click a square we will get a basic javascript alert message.  The onClick
+handler uses the new javascript arrow function syntax.  We could also send the
+onClick handler a function.
+
+#Square.js
+```
+import React, { Component } from 'react'
+
+class Square extends Component {
+  handleClick(){
+    alert('click')
+  }
+
+  render(){
+    return(
+      <button className="square" onClick={this.handleClick}>
+        {this.props.value}
+      </button>
+    )
+  }
+}
+
+export default Square
+```
+Let's say we want to alert the value of the button clicked.  We might go and change
+the alert to `alert(this.props.value)`.  If you make this change and open your
+browsers console when you click you'll see this error:
+
+```
+Uncaught TypeError: Cannot read property 'props' of null
+```
+
+It's telling us that is has no reference of `this`.  We havent passed the correct
+scope to the function.  We can fix this by updating the onClick handler
+
+```
+<button className="square" onClick={this.handleClick.bind(this)}>
+```
+
+Now when we click the handleClick function has the outer scope `this` bound to it.
+Using the new javascript arrow syntac we can also write
 
 
-###Adding Components
-Add Board.js Square.js and redo Game.js
-https://gist.github.com/ChrisBarthol/bb6baa798162ff0775055f2d1b12eee7
+```
+<button className="square" onClick={() => alert(this.props.value)}>
+```
 
-webpack-dev-server --content-base dist/
-
-###Adding Style
-npm install --save-dev extract-text-webpack-plugin style-loader css-loader
-https://gist.github.com/ChrisBarthol/9f95b137dbcdba485af9b198b186588b
+The fat arrow binds the outer scope automatically so we can `this.props.value`
+within it and have the correct value.  Let's stick with previous `this.handleClick.bind(this)`
+for the time being.
 
 
-replace <Square /> with <Square value={i} />
-and the TODO with {this.props.value}
-Extra passing this
-https://gist.github.com/ChrisBarthol/7d495c03ef1eb4b28c555799ddd27d3b
-
-Clicking for X
-https://gist.github.com/ChrisBarthol/5399c2a376aedec14d3320858814e8eb
-
-Push state upwards
-https://gist.github.com/ChrisBarthol/c4f359aa0d45bc889789ddfa1f0e77cb
-
-Functional Components and Taking Turns
-https://gist.github.com/ChrisBarthol/75bba2883adb57a942a6d66b910b9962
-
-Declaring a winner
-https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
-
-Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
-https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
-
-
-###Fuller app
-Add Header and Footer and some more styling
-https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
-
-
-###Add React Router
-npm install --save react-router
-Update index.js
-add App.js
-https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
-
-###Nested Routes
-https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
+We are going to want the Square to know, when clicked, if it should be marked an X or an O.
+The Square component should have a state which at first is null and then when clicked
+maintains the X or O value.
