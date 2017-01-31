@@ -1,65 +1,88 @@
-###Command List
-
-mkdir tictactoe
-npm init
-
-copy and paste package.json depencies and run yarn install (need to have yarn installed)
-
-npm install --save react react-dom
-npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server
+##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
 
-Create webpack.config.js and .babelrc
+###Pushing State Up
 
-Add app and dist directories
-Add index.html and index.js, and dist/index.html files.  We will be rebuilding index_bundle.js with webpack.
+I cannot explain the reasons for lifting state up then [facebook](https://facebook.github.io/react/tutorial/tutorial.html#lifting-state-up)
+does so please read that section.
 
-Add app/components directory
-https://gist.github.com/ChrisBarthol/655cf4e65df70724d5c7773fbfa0c34b
+As they show we cannot allow each Square component to manage it's state since we
+need to know who wins and who's turn is next.  When we push the state up we need
+to define the initial state.  For our tic tac toe game that means we will have
+a board with nine squares that have null values.
 
+#Board.js
+```
+class Board extends Component {
+  constructor() {
+   super()
+   this.state = {
+     squares: Array(9).fill(null)
+   };
+ }
+ ....
+ ```
 
-###Adding Components
-Add Board.js Square.js and redo Game.js
-https://gist.github.com/ChrisBarthol/bb6baa798162ff0775055f2d1b12eee7
+ We now pass the state of each particular square to the square component.
 
-webpack-dev-server --content-base dist/
+ ```
+ renderSquare(i) {
+  return <Square value={this.state.squares[i]} />;
+}
+```
 
-###Adding Style
-npm install --save-dev extract-text-webpack-plugin style-loader css-loader
-https://gist.github.com/ChrisBarthol/9f95b137dbcdba485af9b198b186588b
-
-
-replace <Square /> with <Square value={i} />
-and the TODO with {this.props.value}
-Extra passing this
-https://gist.github.com/ChrisBarthol/7d495c03ef1eb4b28c555799ddd27d3b
-
-Clicking for X
-https://gist.github.com/ChrisBarthol/5399c2a376aedec14d3320858814e8eb
-
-Push state upwards
-https://gist.github.com/ChrisBarthol/c4f359aa0d45bc889789ddfa1f0e77cb
-
-Functional Components and Taking Turns
-https://gist.github.com/ChrisBarthol/75bba2883adb57a942a6d66b910b9962
-
-Declaring a winner
-https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
-
-Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
-https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
+We now need a way for the Square to tell the Board component that the Square was
+clicked.  Our currently onClick handler does not have access to the Board component.
+Lets raise the onClick handler to the Board component.
 
 
-###Fuller app
-Add Header and Footer and some more styling
-https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
+#Board.js
+```
+import React, { Component } from 'react'
+import Square from './Square'
 
+class Board extends Component {
+  constructor() {
+   super()
+   this.state = {
+     squares: Array(9).fill(null)
+   };
+ }
 
-###Add React Router
-npm install --save react-router
-Update index.js
-add App.js
-https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
+ handleClick(i){
+   const squares = this.state.squares.slice()
+   squares[i]='X'
+   this.setState({squares:squares})
+ }
 
-###Nested Routes
-https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
+  renderSquare(i) {
+    return <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)} />
+  }
+```
+
+We send the a property to the Square component called onClick which is a function
+that returns the handleClick function.  In this function we first call slice on
+our squares state.  This copies the squares array to a separate object so we
+[maintain immutability](https://facebook.github.io/react/tutorial/tutorial.html#why-immutability-is-important).
+
+We can now remove a lot of code from our square component. Also notice that we
+have now switched the `this.props.value` to `this.state.value` so we now display
+the X onto the board when clicked.
+
+#Square.js
+```
+import React, { Component } from 'react'
+
+class Square extends Component {
+
+  render(){
+    return(
+      <button className="square" onClick={this.props.onClick}>
+        {this.state.value}
+      </button>
+    )
+  }
+}
+
+export default Square
+```
