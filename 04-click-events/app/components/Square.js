@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 class Square extends Component {
   constructor() {
-   super();
+   super()
    this.state = {
      value: null,
    };
