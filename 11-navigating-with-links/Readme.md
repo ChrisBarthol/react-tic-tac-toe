@@ -1,74 +1,171 @@
 ##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
 
-#Nested Routes
+#Navigating with Links
 
-Our app will have some content that shows on every page.  For us this will be our
-Header and Footer components.  From our `index.js` file our root url displays the
-app component so lets add the extra components there.
+When we arrive at the main page of the app we only have some text rendered.  We
+have no way of directing people to the `/tictactoe` route to play the game. Let's
+add a secondary nav section to our main app.
 
-###components/App.js
+###App.js
+```
+<div className='secondary-nav'>
+  <ul>
+    <li><Link to="/">Home</Link></li>
+    <li><Link to="/tictactoe">TicTacToe</Link></li>
+  </ul>
+</div>
+```
+
+The Link component is almost identical to the anchor tag `<a/>` except that it
+is aware of the Router that it was rendered in.  Since it knows the route it
+can be styled differently
+
+###App.js
+```
+<div className='secondary-nav'>
+  <ul>
+    <li><Link to="/" activeStyle={{ color: 'red' }}>Home</Link></li>
+    <li><Link to="/tictactoe" activeStyle={{ color: 'red' }}>TicTacToe</Link></li>
+  </ul>
+</div>
+```
+
+Notice that when you go to `/tictactoe` both link items are red since `/tictactoe`
+is nested under the root url and both routes are active.  The above method uses
+inline styling.  The Link component also supports class names.
+
+###App.js
+```
+<div className='secondary-nav'>
+  <ul>
+    <li><Link to="/" activeClassName="active">Home</Link></li>
+    <li><Link to="/tictactoe" activeClassName="active">TicTacToe</Link></li>
+  </ul>
+</div>
+```
+
+###styles/main.css
+```
+.active {
+  color: green;
+}
+```
+
+And now our active routes are green!
+
+Now not every link needs to have an active state.  Usually we would only need those
+link types for primary page navigation.  It can be tough to remember exactly what
+active style everywhere.  We can use the composability of components to create a
+wrapper for Link components that we wish to have the active style applied to.
+
+Create a new folder and file `wrappers/NavLink.js`
+
+###wrappers/NavLink.js
+```
+import React from 'react'
+import { Link } from 'react-router'
+
+export default React.createClass({
+  render() {
+    return <Link {...this.props} activeClassName="active"/>
+  }
+})
+```
+
+In this component we return the Link component.  We've added the spread operator `...`
+three dots.  This clons our props and in this case the activeClassName prop. Now
+in we can use this component as our navigation links.
+
+###App.js
+```
+import NavLink from '../wrappers/NavLink'
+
+...
+
+
+<div className='secondary-nav'>
+  <ul>
+    <li><NavLink to="/">Home</NavLink></li>
+    <li><NavLink to="/tictactoe">TicTacToe</NavLink></li>
+  </ul>
+</div>
+```
+
+This secondary nav section looks a little silly. Let's add the tictactoe route
+to our main nav bar as well as create routes for the contact and about page.
+
+###components/Contact.js
 ```
 import React, { Component } from 'react'
-import Header from './Header'
-import Footer from './Footer'
 
-class App extends Component {
+class Contact extends Component {
   render(){
     return(
       <div>
-        <Header />
-        <div className='content'>
-          App
-        </div>
-        <Footer />
+        Contact Page
       </div>
     )
   }
 }
 
-export default App
+export default Contact
 ```
 
-We import our components and then place them within our render function.  We've
-also added a `content` div which will display our inner content.  That inner content
-is going to change based on which page we are on. For our new app lets make the
-Game component render on the route `/tictactoe`. This route should be nested
-under the root url.
+###components/About.js
+```
+import React, { Component } from 'react'
+
+class About extends Component {
+  render(){
+    return(
+      <div>
+        About Page
+      </div>
+    )
+  }
+}
+
+export default About
+```
+
+###components/Header.js
+```
+import NavLink from '../wrappers/NavLink'
+
+....
+
+<ul className="nav navbar-nav">
+  <li><NavLink to="/about">About</NavLink></li>
+  <li><NavLink to="/contact">Contact</NavLink></li>
+  <li><NavLink to="/tictactoe">TicTacToe</NavLink></li>
+</ul>
+```
+
+We then need to define these routes in the router.
+
 
 ###index.js
 ```
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './components/App'
-import Game from './components/Game'
-import { Router, Route, hashHistory } from 'react-router'
+import About from './components/About'
+import Contact from './components/Contact'
 
-ReactDOM.render((
-  <Router history={hashHistory}>
-    <Route path="/" component={App}>
-      <Route path="/tictactoe" component={Game}/>
-    </Route>
-  </Router>
-), document.getElementById('app'))
+...
+
+<Route path="/" component={App}>
+  <Route path="/tictactoe" component={Game}/>
+  <Route path="/about" component={About}/>
+  <Route path="/contact" component={Contact}/>
+</Route>
 ```
 
-Here we have expanded the root url Route component to have a separate closing `</Route`.
-Anything within the root url tags will now be nested.  We have also added the Game
-component to the `/tictactoe` route.  When we start the dev server and go to the root
-url we now see the Header and Footer surround the 'App ' text.  Lets go to the `/tictactoe`
-route.
+Since we are putting the links in the nav lets update the `active` class.
 
-Hrm... we still see just App. We've loaded the root url but there is no outlet
-for our nested route. We need to load the child components into the App component.
 
-###App.js
+###main.css
 ```
-<div className='content'>
-  App
-  {this.props.children}
-</div>
+.active {
+  color: white;
+  font-weight: bold;
+}
 ```
-
-Now our Game component will render into the App component.  Remove the Footer and
-Header component calls in the Game component to remove the double header and footers.
