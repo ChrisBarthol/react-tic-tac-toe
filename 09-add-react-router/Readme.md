@@ -1,65 +1,101 @@
-###Command List
-
-mkdir tictactoe
-npm init
-
-copy and paste package.json depencies and run yarn install (need to have yarn installed)
-
-npm install --save react react-dom
-npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server
-
-
-Create webpack.config.js and .babelrc
-
-Add app and dist directories
-Add index.html and index.js, and dist/index.html files.  We will be rebuilding index_bundle.js with webpack.
-
-Add app/components directory
-https://gist.github.com/ChrisBarthol/655cf4e65df70724d5c7773fbfa0c34b
-
-
-###Adding Components
-Add Board.js Square.js and redo Game.js
-https://gist.github.com/ChrisBarthol/bb6baa798162ff0775055f2d1b12eee7
-
-webpack-dev-server --content-base dist/
-
-###Adding Style
-npm install --save-dev extract-text-webpack-plugin style-loader css-loader
-https://gist.github.com/ChrisBarthol/9f95b137dbcdba485af9b198b186588b
-
-
-replace <Square /> with <Square value={i} />
-and the TODO with {this.props.value}
-Extra passing this
-https://gist.github.com/ChrisBarthol/7d495c03ef1eb4b28c555799ddd27d3b
-
-Clicking for X
-https://gist.github.com/ChrisBarthol/5399c2a376aedec14d3320858814e8eb
-
-Push state upwards
-https://gist.github.com/ChrisBarthol/c4f359aa0d45bc889789ddfa1f0e77cb
-
-Functional Components and Taking Turns
-https://gist.github.com/ChrisBarthol/75bba2883adb57a942a6d66b910b9962
-
-Declaring a winner
-https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
-
-Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
-https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
-
-
-###Fuller app
-Add Header and Footer and some more styling
-https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
+##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
 
 ###Add React Router
-npm install --save react-router
-Update index.js
-add App.js
-https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
 
-###Nested Routes
-https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
+This lesson we are going to add React Router.  Before we get there, lets add a bit
+more style with a nav and footer.  This will make our React Router tutorial easy.
+Go ahead and update the following files
+
+app/index.html : Add Bootstrap, Jquery (needed for bootstrap), Font Awesome
+components/Footer.js
+components/Header.js
+styles/nav.css
+
+Now in your Game component lets add the Footer and Header to see what they look like.
+
+#Game.js
+```
+import React, { Component } from 'react'
+import Board from './Board'
+import Footer from './Footer'
+import Header from './Header'
+require('../styles/main.css')
+
+class Game extends Component {
+
+  ......
+
+    return (
+    <div>
+      <Header />
+      <div className="game">
+        <div className="game-board">
+          <Board
+            squares={current.squares}
+            onClick={(i) => this.handleClick(i)}/>
+        </div>
+        <div className="game-info">
+          <div>{status}</div>
+          <ol>{moves}</ol>
+        </div>
+      </div>
+      <Footer />
+    </div>
+  )
+  }
+}
+
+export default Game
+```
+
+We import the Header and Footer components into the Game component and then
+add them to the render's return.  Next lets add React Router
+
+```
+npm install --save react-router
+```
+
+React Router is not a dev dependency, so use `--save`.  Currently we load the
+Game component directly into the app id element on the page.  We are going to
+want multiple pages, maybe we'll have a bunch of different games on our site.
+We'll let React Router handle the routing of the entire app.  Notice we are moving
+from just a Game component and now talking about an entire app.
+
+#app/index.js
+```
+import React from 'react'
+import ReactDOM from 'react-dom'
+import App from './components/App'
+import Game from './components/Game'
+import { Router, Route, hashHistory } from 'react-router'
+
+ReactDOM.render((
+  <Router history={hashHistory}>
+    <Route path="/" component={App} />
+  </Router>
+), document.getElementById('app'))
+```
+
+We've added a react-router import and replace out `<Game />` component with React
+Router.  React Router is a component, just like Game is a component.  We will start
+with using react routers hash history.  It manages routing history with the hash
+portion of the url.  Within the Router component with have a Route component.
+Here we defined the path prop to be the root url and the component prop to be
+an App component.  We currently done have this component so lets go ahead and make it.
+
+#components/App.js
+```
+import React, { Component } from 'react'
+
+class App extends Component {
+  render(){
+    return <div>App</div>
+  }
+}
+
+export default App
+```
+
+For now lets just return a div that says App.  Running `npm start` we no longer have
+our Game component but we are now using react router to load the App component.
