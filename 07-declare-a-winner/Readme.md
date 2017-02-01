@@ -1,65 +1,127 @@
-###Command List
-
-mkdir tictactoe
-npm init
-
-copy and paste package.json depencies and run yarn install (need to have yarn installed)
-
-npm install --save react react-dom
-npm install --save-dev babel-core babel-loader babel-preset-es2015 babel-preset-react webpack webpack-dev-server
+##This is a continuation of the react-tic-tac-toe tutorial. The state of the app in this lesson is the end state of the directions in the Readme. Follow the directions in the Readme and you should arrive at the same state.
 
 
-Create webpack.config.js and .babelrc
+###Taking turns and declaring a winner
 
-Add app and dist directories
-Add index.html and index.js, and dist/index.html files.  We will be rebuilding index_bundle.js with webpack.
+Currently our tic tac toe game only places an X into squares.  We need to switch
+between X and O.  First lets set up our initial state in our Board component.
 
-Add app/components directory
-https://gist.github.com/ChrisBarthol/655cf4e65df70724d5c7773fbfa0c34b
+#Board.js
 
+```
+class Board extends Component {
+  constructor() {
+   super()
+   this.state = {
+     squares: Array(9).fill(null),
+     xIsNext: true,
+   }
+ }
+ ```
 
-###Adding Components
-Add Board.js Square.js and redo Game.js
-https://gist.github.com/ChrisBarthol/bb6baa798162ff0775055f2d1b12eee7
+We initialize the component with a state property of xIdNext and set it true.  The
+game starts with X selecting a square first.  After selection we want to switch
+to O.  We'll update the `handleClick` function.
 
-webpack-dev-server --content-base dist/
+#Board.js
+```
+handleClick(i){
+ const squares = this.state.squares.slice()
+ squares[i]= this.state.xIsNext ? 'X' : 'O'
+ this.setState({
+   squares:squares,
+   xIsNext: !this.state.xIsNext
+ })
+}
+```
+Instead of just having `square[i]` be X we check the state of `xIsNext`.  If true
+then make it an X else make it an O.  We update our squares state as well as the
+state of `xIsNext`.  We make it the opposite of the original value.  Now our clicks
+alternate between X and O.  Let's finish of the basic tic tac toe game by declaring
+a winner.
 
-###Adding Style
-npm install --save-dev extract-text-webpack-plugin style-loader css-loader
-https://gist.github.com/ChrisBarthol/9f95b137dbcdba485af9b198b186588b
+We'll need a function to handle the check of three in a row.
 
+#Board.js
+```
+calculateWinner(squares) {
+ const lines = [
+   [0, 1, 2],
+   [3, 4, 5],
+   [6, 7, 8],
+   [0, 3, 6],
+   [1, 4, 7],
+   [2, 5, 8],
+   [0, 4, 8],
+   [2, 4, 6],
+ ]
+ for (let i = 0; i < lines.length; i++) {
+   const [a, b, c] = lines[i]
+   if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+     return squares[a]
+   }
+ }
+ return null
+}
+```
 
-replace <Square /> with <Square value={i} />
-and the TODO with {this.props.value}
-Extra passing this
-https://gist.github.com/ChrisBarthol/7d495c03ef1eb4b28c555799ddd27d3b
+Here we define an array of arrays which hold every tic tac toe winner scenario.
+We run through a for loop to check if any combination of three is a match.  If
+we have a match we return the winner, either 'X' or 'O'.  We should check the
+winning conditions every time a square is clicked, so lets add a few more lines
+to our `handleClick` function.
 
-Clicking for X
-https://gist.github.com/ChrisBarthol/5399c2a376aedec14d3320858814e8eb
+#Board.js
+```
+handleClick(i){
+  const squares = this.state.squares.slice()
+  if (this.calculateWinner(squares) || squares[i]) {
+      return
+    }
+  squares[i] = this.state.xIsNext ? 'X' : 'O'
+  this.setState({
+    squares: squares,
+    xIsNext: !this.state.xIsNext
+  })
+}
+```
 
-Push state upwards
-https://gist.github.com/ChrisBarthol/c4f359aa0d45bc889789ddfa1f0e77cb
+Now if we detect a winner or click the same square we'll immediately return out
+of the click handler and nothing will happen.  Otherwise we'll continue on.  Let's
+finish the game by declaring the winner on the page.
 
-Functional Components and Taking Turns
-https://gist.github.com/ChrisBarthol/75bba2883adb57a942a6d66b910b9962
+#Board.js
+```
+render() {
+  const winner = this.calculateWinner(this.state.squares);
+  let status;
+  if (winner) {
+    status = 'Winner: ' + winner;
+  } else {
+    status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
+  }
+  return(
+    <div>
+      <div className="status">{status}</div>
+      <div className="board-row">
+        {this.renderSquare(0)}
+        {this.renderSquare(1)}
+        {this.renderSquare(2)}
+      </div>
+      <div className="board-row">
+        {this.renderSquare(3)}
+        {this.renderSquare(4)}
+        {this.renderSquare(5)}
+      </div>
+      <div className="board-row">
+        {this.renderSquare(6)}
+        {this.renderSquare(7)}
+        {this.renderSquare(8)}
+      </div>
+    </div>
+  )
+}
+```
 
-Declaring a winner
-https://gist.github.com/ChrisBarthol/fd13cb85f25e58ef4da3b25411da1663
-
-Storing History - Follow https://facebook.github.io/react/tutorial/tutorial.html for excellent text
-https://gist.github.com/ChrisBarthol/b7047d109c0ee1329a81ae9b49020d1c
-
-
-###Fuller app
-Add Header and Footer and some more styling
-https://gist.github.com/ChrisBarthol/961faee5a7e8e932773d0bca59fd62a2
-
-
-###Add React Router
-npm install --save react-router
-Update index.js
-add App.js
-https://gist.github.com/ChrisBarthol/fe05341c123eae2d53fa20590df4c119
-
-###Nested Routes
-https://gist.github.com/ChrisBarthol/908f2b1088f5bd27eaa50e2d57b9e446
+Here we populate the status with either the person who goes next, or the winner.
+Your tic tac toe game is complete!  As with any project, we can make it better.
