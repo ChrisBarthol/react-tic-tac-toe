@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import NavLink from '../wrappers/NavLink'
+import {Link} from 'react-router'
 require('../styles/nav.css');
 
 var Header = React.createClass({
@@ -13,7 +14,7 @@ var Header = React.createClass({
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
           </button>
-          <a className="navbar-brand text-center" href="/">React Tic Tac Toe</a>
+          <Link to="/" activeClassName="navbar-brand text-center">React Tic Tac Toe</Link>
         </div>
 
         <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

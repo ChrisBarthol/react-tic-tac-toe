@@ -132,6 +132,11 @@ export default About
 ###components/Header.js
 ```
 import NavLink from '../wrappers/NavLink'
+import Link from 'react-router'
+
+....
+
+<Link to="/" activeClassName="navbar-brand text-center">React Tic Tac Toe</Link>
 
 ....
 
