@@ -92,6 +92,36 @@ import NavLink from '../wrappers/NavLink'
 </div>
 ```
 
+You'll notice that the Home link is always active. The `tictactoe` route is a nested
+route of the root so the root is the parent of everything.  We only want it to be
+in an active state when we are on the rot url.  Luckily React Router has a component
+for index routes
+###App.js
+```
+import { Router, Route, hashHistory, IndexRoute } from 'react-router'
+
+...
+
+<div className='secondary-nav'>
+  <ul>
+    <li><IndexLink to="/" activeClassName="active">Home</IndexLink></li>
+    <li><NavLink to="/tictactoe">TicTacToe</NavLink></li>
+  </ul>
+</div>
+```
+We could also use the `onlyActiveOnIndex` property:
+
+```
+<li><Link to="/" activeClassName="active" onlyActiveOnIndex={true}>Home</Link></li>
+```
+
+Since we've already abstracted away the `activeClassName` with the NavLink component
+we can pass the `onlyActiveOnIndex` prop to NavLink.
+
+```
+<li><NavLink to="/" onlyActiveOnIndex={true}>Home</NavLink></li>
+```
+
 This secondary nav section looks a little silly. Let's add the tictactoe route
 to our main nav bar as well as create routes for the contact and about page.
 

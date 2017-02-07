@@ -1,0 +1,12 @@
+node_modules/*
+npm-debug.log
+01-webpack-setup/node_modules/*
+02-add-components/node_modules/*
+03-add-style/node_modules/*
+04-click-events/node_modules/*
+05-push-state-upwards/node_modules/*
+06-function-components/node_modules/*
+07-declare-a-winner/node_modules/*
+08-storing-history/node_modules/*
+09-add-react-router/node_modules/*
+10-nested-routes/node_modules/*
